@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart' hide Level;
@@ -13,11 +14,11 @@ import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
 import '../game_internals/board_state.dart';
 import '../game_internals/score.dart';
+import '../multiplayer/firestore_controller.dart';
 import '../style/confetti.dart';
 import '../style/my_button.dart';
 import '../style/palette.dart';
 import 'board_widget.dart';
-
 /// This widget defines the entirety of the screen that the player sees when
 /// they are playing a level.
 ///
@@ -42,7 +43,9 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   late DateTime _startOfPlay;
 
   late final BoardState _boardState;
-
+  
+  FirestoreController? _firestoreController;
+  
   @override
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
@@ -107,6 +110,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   @override
   void dispose() {
     _boardState.dispose();
+    _firestoreController?.dispose();
     super.dispose();
   }
 
@@ -115,6 +119,18 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     super.initState();
     _startOfPlay = DateTime.now();
     _boardState = BoardState(onWin: _playerWon);
+    final firestore = context.read<FirebaseFirestore?>();
+    if (firestore == null) {
+      _log.warning(
+        "Firestore instance wasn't provided. "
+        'Running without _firestoreController.',
+      );
+    } else {
+      _firestoreController = FirestoreController(
+        instance: firestore,
+        boardState: _boardState,
+      );
+    }
   }
 
   Future<void> _playerWon() async {
