@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../ads/my_banner_ad.dart';
 import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
 import '../settings/settings.dart';
@@ -69,6 +70,9 @@ class MainMenuScreen extends StatelessWidget {
             ),
             _gap,
             const Text('Music by Mr Smith'),
+            _gap,
+            // Banner de anuncios
+            MyBannerAdWidget(),
             _gap,
           ],
         ),

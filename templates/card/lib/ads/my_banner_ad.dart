@@ -12,14 +12,11 @@ class MyBannerAdWidget extends StatefulWidget {
   /// TODO: replace this test ad unit with your own ad unit
   final String adUnitId = Platform.isAndroid
       // Use this ad unit on Android...
-      ? 'ca-app-pub-2235380563319222/7255639686'
+      ? 'ca-app-pub-3940256099942544/6300978111'
       // ... or this one on iOS.
       : 'ca-app-pub-3940256099942544/2934735716';
 
-  MyBannerAdWidget({
-    super.key,
-    this.adSize = AdSize.banner,
-  });
+  MyBannerAdWidget({super.key, this.adSize = AdSize.banner});
 
   @override
   State<MyBannerAdWidget> createState() => _MyBannerAdWidgetState();
@@ -47,10 +44,6 @@ class _MyBannerAdWidgetState extends State<MyBannerAdWidget> {
   @override
   void initState() {
     super.initState();
-
-    // Consider using a ChangeNotifier, a BLoC, a controller, or whatever
-    // else you are using for app-level state to pre-load your banner ads,
-    // so that you avoid the delay before an ad is shown.
     _loadAd();
   }
 
@@ -88,4 +81,6 @@ class _MyBannerAdWidgetState extends State<MyBannerAdWidget> {
     // Start loading.
     bannerAd.load();
   }
+
 }
+
