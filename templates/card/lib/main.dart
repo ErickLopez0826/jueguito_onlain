@@ -3,10 +3,14 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:developer' as dev;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+import 'firebase_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -37,8 +41,14 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
+  // Inicializar Google AdMob SDK
+  unawaited(MobileAds.instance.initialize());
+  
+  runApp(Provider.value(value: FirebaseFirestore.instance, child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
